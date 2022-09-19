@@ -21,7 +21,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: https://uploads.github.com/repos/joyqi/typecho-plugins/releases/77482728/assets{?name,label}
+        upload_url: https://uploads.github.com/repos/binjoo/typecho-plugins/releases/77482728/assets{?name,label}
         release_id: 77482728
         asset_path: ./DiguWormhole.zip
         asset_name: DiguWormhole.zip
