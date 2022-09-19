@@ -17,7 +17,7 @@ jobs:
       run: |
         cd DiguWormhole && zip -q -r DiguWormhole.zip * && mv DiguWormhole.zip ../ && cd -
     - name: Upload DiguWormhole
-      uses: WebFreak001/deploy-nightly@v1.1.0
+      uses: WebFreak001/deploy-nightly@v1.2.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
