@@ -19,7 +19,7 @@ jobs:
     - name: Upload DiguWormhole
       uses: WebFreak001/deploy-nightly@v1.2.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/joyqi/typecho-plugins/releases/77482728/assets{?name,label}
         release_id: 77482728
