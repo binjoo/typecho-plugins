@@ -1,0 +1,28 @@
+name: Build Plugins
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Typecho Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Build
+      run: |
+        cd DiguWormhole && zip -q -r DiguWormhole.zip * && mv DiguWormhole.zip ../ && cd -
+    - name: Upload DiguWormhole
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/joyqi/typecho-plugins/releases/78290495/assets{?name,label}
+        release_id: 78290495
+        asset_path: ./DiguWormhole.zip
+        asset_name: DiguWormhole.zip
+        asset_content_type: application/zip
