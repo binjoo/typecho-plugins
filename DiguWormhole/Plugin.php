@@ -14,7 +14,7 @@ use Widget\Comments\Archive as CommentsArchive;
  * 
  * @package DiguWormhole
  * @author 冰剑
- * @version 1.0.1
+ * @version 1.0.2
  * @link https://digu.plus
  */
 class Plugin implements PluginInterface
@@ -71,6 +71,7 @@ class Plugin implements PluginInterface
   public static function updateAgent($comment) {
     if(Cookie::get('__typecho_foreverblog')){
       $comment['agent'] = $comment['agent'] . ' foreverblog';
+      Cookie::delete('__typecho_foreverblog');
     }
     return $comment;
   }
