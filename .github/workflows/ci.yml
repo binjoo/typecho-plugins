@@ -17,6 +17,7 @@ jobs:
       run: |
         cd DiguWormhole && zip -q -r DiguWormhole.zip * && mv DiguWormhole.zip ../ && cd -
         cd HiLinks && zip -q -r HiLinks.zip * && mv HiLinks.zip ../ && cd -
+        cd Gemini && zip -q -r Gemini.zip * && mv Gemini.zip ../ && cd -
     - name: Upload DiguWormhole
       uses: WebFreak001/deploy-nightly@v1.2.0
       env:
@@ -36,4 +37,14 @@ jobs:
         release_id: 77482728
         asset_path: ./HiLinks.zip
         asset_name: HiLinks.zip
+        asset_content_type: application/zip
+    - name: Upload Gemini
+      uses: WebFreak001/deploy-nightly@v1.2.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/binjoo/typecho-plugins/releases/77482728/assets{?name,label}
+        release_id: 77482728
+        asset_path: ./Gemini.zip
+        asset_name: Gemini.zip
         asset_content_type: application/zip
