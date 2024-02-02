@@ -15,7 +15,7 @@ use Utils\Helper;
  * 
  * @package HiLinks
  * @author 冰剑
- * @version 1.0.0
+ * @version 1.1.0
  * @link https://digu.plus
  */
 class Plugin implements PluginInterface
@@ -38,23 +38,6 @@ class Plugin implements PluginInterface
                       `order` int(10) default 0,
                       PRIMARY KEY (`lid`)
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1");
-
-            // $num = $db->fetchObject(
-            //   $db->select(['COUNT(mid)' => 'num'])->from('table.metas')->where('type = ?', 'link')
-            // )->num;
-            // if($num <= 0){
-            //   $db->query(
-            //     $db->insert('table.metas')->rows([
-            //       'name' => '默认分组',
-            //       'slug' => '默认分组',
-            //       'type' => 'link',
-            //       'description' => '默认分组',
-            //       'count' => 0,
-            //       'order' => 1,
-            //       'parent' => 0
-            //     ])
-            //   );
-            // }
         }else{
             throw new Exception(_t('对不起, 本插件仅支持MySQL数据库。'));
         }

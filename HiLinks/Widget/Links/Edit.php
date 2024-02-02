@@ -106,7 +106,7 @@ class Edit extends Links implements ActionInterface
             null,
             null,
             _t('链接图标'),
-            _t('可填写email或者图片链接，如填写email则会展示gravatar。')
+            _t('可填写 email 或者图片链接，如填写 email 则会展示gravatar。')
         );
         $form->addInput($icon);
 

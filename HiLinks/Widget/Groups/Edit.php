@@ -139,7 +139,8 @@ class Edit extends Metas implements ActionInterface
         $gourp['count'] = 0;
         $group['order'] = $order + 1;
         $group['parent'] = 0;
-        
+        $group['type'] = 'link';
+	
         // /** 插入数据 */
         $group['mid'] = $this->insert($group);
         $this->push($group);
