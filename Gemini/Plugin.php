@@ -2,6 +2,7 @@
 
 namespace TypechoPlugin\Gemini;
 
+use Typecho\Db;
 use Typecho\Http\Client;
 use Typecho\Http\Client\Exception;
 use Typecho\Plugin\PluginInterface;
@@ -9,6 +10,7 @@ use Typecho\Widget\Helper\Form;
 use Typecho\Widget\Helper\Form\Element\Text;
 use Typecho\Widget\Helper\Form\Element\Select;
 use Typecho\Widget\Helper\Form\Element\Textarea;
+use Typecho\Widget\Helper\Form\Element\Radio;
 use Widget\Options;
 use Utils\Helper;
 use Utils\Markdown;
@@ -18,7 +20,7 @@ use Utils\Markdown;
  * 
  * @package Gemini
  * @author 冰剑
- * @version 1.0.0
+ * @version 1.0.1
  * @link https://digu.plus
  */
 class Plugin implements PluginInterface
@@ -42,7 +44,13 @@ class Plugin implements PluginInterface
      * @throws Typecho_Plugin_Exception
      */
     public static function deactivate(){
-	}
+      if (Options::alloc()->plugin('Gemini')->clear) {
+        $db = Db::get();
+        if("Pdo_Mysql" === $db->getAdapterName() || "Mysql" === $db->getAdapterName()){
+           $db->query($db->delete('table.fields')->where('name = ?', 'gemini_comment'));
+        }
+      }
+    }
    
     /**
      * 获取插件配置面板
@@ -65,12 +73,22 @@ class Plugin implements PluginInterface
       $timeout->input->setAttribute('class', 'mini');
       $form->addInput($timeout);
 
-      $text = new Textarea('text', NULL, '我写了一篇日志，标题是`{title}`，内容是`{text}`，作为博客的日常博友，需要你根据日志内容写一段不超过128个汉字的评论，不用太正式，随意一点。', _t('对话内容'), _t('根据自己的需要进行调整，不要有废话。<br />支持的占位值：{title}：标题、{text}：内容原文、{html}：内容HTML'));
+      $text = new Textarea('text', NULL, _t('我写了一篇日志，标题是`{title}`，内容是`{text}`，作为博客的日常博友，需要你根据日志内容写一段不超过128个汉字的评论，不用太正式，随意一点。'), _t('对话内容'), _t('根据自己的需要进行调整，不要有废话。<br />支持的占位值：{title}：标题、{text}：内容原文、{html}：内容HTML'));
       $apiKey->addRule('required', _t('请填写对话内容'));
       $form->addInput($text);
 
       $customUrl = new Text('customUrl', NULL, 'https://generativelanguage.googleapis.com/v1/models/{model}:generateContent', '自定义接口地址', '服务器在<a target="_blank" href="https://ai.google.dev/available_regions#available_regions">可用区域</a>的使用默认的即可，中国仅台湾省可用。');
       $form->addInput($customUrl);
+
+      $clear = new Radio('clear',
+        [
+          '1' => _t('是'),
+          '0' => _t('否')
+        ], 0,
+        _t('删除数据'),
+        _t('禁用本插件时，是否删除插件产生的所有数据。<br /><strong class="warning">操作不可逆，请谨慎选择！</strong><br /><strong class="warning">操作不可逆，请谨慎选择！</strong><br /><strong class="warning">操作不可逆，请谨慎选择！</strong>')
+      );
+      $form->addInput($clear);
 
       return $form;
     }
@@ -85,6 +103,9 @@ class Plugin implements PluginInterface
     public static function personalConfig(Form $form){}
 
     public static function comment($post){
+      if($post->type != 'post'){
+        return false;
+      }
       if(isset($post->fields->gemini_comment) || $post->fields->gemini_comment == null){
         $option = Helper::options()->plugin('Gemini');
 
